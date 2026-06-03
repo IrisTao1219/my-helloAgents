@@ -1,0 +1,7 @@
+[project]
+dependencies = [
+    "requests",
+    "tavily-python",
+    "openai"
+    "python-dotenv"
+]
