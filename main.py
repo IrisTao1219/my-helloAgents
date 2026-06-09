@@ -3,22 +3,10 @@ import re
 
 from api_llm import MyOpenAIClient
 from tool import available_tools
-from pathlib import Path
-from dotenv import load_dotenv
-
-
-def load_prompt(path: str) -> str:
-    return Path(__file__).parent.joinpath(path).read_text(encoding="utf-8")
-
-# 加载环境变量
-load_dotenv()
-
-MODEL_ID = os.getenv("LLM_MODEL_ID", "")
-BASE_URL = os.getenv("LLM_BASE_URL")
-API_KEY = os.getenv("LLM_API_KEY")
+from utils import load_prompt, re_group
 
 def chat():
-    llm = MyOpenAIClient(model=MODEL_ID, base_url=BASE_URL, api_key=API_KEY)
+    llm = MyOpenAIClient()
 
     user_prompt = "请告诉我北京当前的天气，并推荐一个适合这个天气的旅游景点。"
     prompt_history = [f"用户请求: {user_prompt}"]
@@ -53,12 +41,12 @@ def chat():
         action_str = action_match.group(1).strip()
 
         if action_str.startswith("Finish"):
-            final_answer = re.match(r"Finish\[(.*)\]", action_str).group(1)
+            final_answer = re_group(r"Finish\[(.*)\]", action_str)
             print(f"✅ 任务完成，最终答案: {final_answer}\n")
             break
         
-        tool_name = re.search(r"(\w+)\(", action_str).group(1)
-        args_str = re.search(r"\((.*)\)", action_str).group(1)
+        tool_name = re_group(r"(\w+)\(", action_str)
+        args_str = re_group(r"\((.*)\)", action_str)
         kwargs = dict(re.findall(r'(\w+)="([^"]*)"', args_str))
 
         if tool_name in available_tools:
@@ -69,7 +57,7 @@ def chat():
 
 
         observation_str = f"Observation: {observation}"
-        print(f"{observation_str}\n" + "-" * 50)
+        print(f"{observation_str}\n" + "=" * 50)
         prompt_history.append(observation_str)
         
 if __name__ == "__main__":
