@@ -1,5 +1,3 @@
-# ReAct 提示词模板
-REACT_PROMPT_TEMPLATE = """
 请注意，你是一个有能力调用外部工具的智能助手。
 
 可用工具如下:
@@ -16,4 +14,3 @@ Action: 你决定采取的行动，必须是以下格式之一:
 现在，请开始解决以下问题:
 Question: {question}
 History: {history}
-"""
