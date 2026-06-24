@@ -1,9 +1,9 @@
-import os
 import re
 
 from api_llm import MyOpenAIClient
 from tool import available_tools
 from utils import load_prompt, re_group
+
 
 def chat():
     llm = MyOpenAIClient()
@@ -59,6 +59,6 @@ def chat():
         observation_str = f"Observation: {observation}"
         print(f"{observation_str}\n" + "=" * 50)
         prompt_history.append(observation_str)
-        
+
 if __name__ == "__main__":
     chat()

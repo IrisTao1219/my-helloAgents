@@ -1,5 +1,4 @@
 import os
-import time
 from typing import Iterable, cast
 from dotenv import load_dotenv
 from openai import OpenAI
