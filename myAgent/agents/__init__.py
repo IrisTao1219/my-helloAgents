@@ -1,5 +1,5 @@
-from .simple_agent import MyAgent
+from .simple_agent import SimpleAgent
 
 __all__ = [
-    "MyAgent"
+    "SimpleAgent"
 ]

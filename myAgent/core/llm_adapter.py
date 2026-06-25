@@ -138,21 +138,6 @@ class OpenAIAdapter(BaseLLMAdapter):
         except Exception as e:
             raise Exception(f"OpenAI API调用失败: {str(e)}")
 
-    def _convert_messages(
-        self, messages: List[Dict]
-    ) -> tuple[Optional[str], List[Dict]]:
-        """转换消息格式，提取system消息"""
-        system_content = None
-        converted_messages = []
-
-        for msg in messages:
-            if msg["role"] == "system":
-                system_content = msg["content"]
-            else:
-                converted_messages.append(msg)
-
-        return system_content, converted_messages
-
     def stream_invoke(self, messages: List[Dict], **kwargs) -> Iterator[str]:
         """流式调用"""
         if not self._client:

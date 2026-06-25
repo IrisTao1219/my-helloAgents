@@ -1,8 +1,9 @@
 import asyncio
 
-from agents import MyAgent
+from agents import SimpleAgent
 from core import MyLLM
 
+from myAgent.tools.builtin.calculator import CalculatorTool
 from myAgent.tools.my_calculator_tool import my_calculate
 from myAgent.tools.registry import ToolRegistry
 
@@ -38,7 +39,7 @@ def local():
 def test_simple_agent():
     llm = MyLLM(model="Qwen2.5:0.5b", base_url="http://localhost:11434/v1")
 
-    agent = MyAgent(
+    agent = SimpleAgent(
         name="TestAgent",
         llm=llm,
         system_prompt="你是一个专业的助手，能够回答用户的问题。",
@@ -80,9 +81,29 @@ async def test_func_registry():
     print()
 
 
+async def test_tool_registry():
+    llm = MyLLM()
+
+    tool_registry = ToolRegistry()
+    calculator = CalculatorTool()
+    tool_registry.register_tool(calculator)
+
+    agent = SimpleAgent(
+        name="增强助手",
+        llm=llm,
+        system_prompt="你是一个智能助手，可以使用工具来帮助用户。",
+        tool_registry=tool_registry,
+        enable_tool_calling=True,
+    )
+
+    response = agent.run("请帮我计算 sqrt(16) + 2 * 3")
+    print(f"工具增强响应: {response}\n")
+
+
 if __name__ == "__main__":
     # myMain()
     # local()
     # test_simple_agent()
 
-    asyncio.run(test_func_registry())
+    #  asyncio.run(test_func_registry())
+    asyncio.run(test_tool_registry())

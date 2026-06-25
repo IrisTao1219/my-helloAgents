@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Dict, List, Optional
 
 from .llm import MyLLM
@@ -13,7 +14,8 @@ class Agent:
 
         self._history: List[Message] = []
 
-    def run(self, input_text: str, **kwargs):
+    @abstractmethod
+    def run(self, input_text: str, **kwargs) -> str:
         """运行智能体"""
         pass
 
